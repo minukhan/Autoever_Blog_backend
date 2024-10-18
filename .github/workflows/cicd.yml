@@ -48,8 +48,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            namsh1125/test:${{ github.event.release.tag_name }}
-            namsh1125/test:latest
+            jinii915/blogserver:${{ github.event.release.tag_name }}
+            jinii915/blogserver:latest
 
       - name: Deploy
         uses: appleboy/ssh-action@v1.1.0
@@ -61,5 +61,5 @@ jobs:
           script: |
             sudo docker stop server
             sudo docker rm server
-            sudo docker rmi namsh1125/test
-            sudo docker run --name server -dp 8080:8080 namsh1125/test
+            sudo docker rmi jinii915/blogserver
+            sudo docker run --name server -dp 8080:8080 jinii915/blogserver
