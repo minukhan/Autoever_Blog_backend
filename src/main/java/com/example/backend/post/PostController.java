@@ -9,6 +9,8 @@ import org.springframework.data.repository.support.Repositories;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Data
 @RestController
 @RequestMapping("/api/posts")
@@ -22,6 +24,21 @@ public class PostController {
         return ResponseEntity.ok(postId);
     }
 
+    @GetMapping
+    public List<PostDto> getAllPosts(){
+        return postService.getAllPosts();
+    }
 
+    // 특정 게시글 조회
+    @GetMapping("/{postId}")
+    public PostDto getPostById(@PathVariable Long postId) {
+        return postService.getPostById(postId);
+    }
+
+    //유저 아이디 별 게시글 조회
+    @GetMapping("/user/{userId}")
+    public List<PostDto> getUserPosts(@PathVariable Long userId){
+        return postService.getUserPosts(userId);
+    }
 
 }
