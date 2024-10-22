@@ -28,12 +28,6 @@ public class PostController {
             @RequestParam("thumbnailUrl") MultipartFile thumbnailUrl // 이미지 파일을 받을 때 사용
     ) {
 
-        // 파일 및 데이터 처리 로직
-        // 예를 들어, 파일 저장, 데이터베이스에 저장 등을 수행
-
-        log.info("Title~~~~~~~~~~~~~~: " + postWriteDto);
-        log.info("Title~~~~~~~~~~~~~~: " + thumbnailUrl);
-
         Long postId = Long.valueOf(postService.createPost(postWriteDto, thumbnailUrl));
 
 //        Long postId = postService.createPost(postWriteDto);

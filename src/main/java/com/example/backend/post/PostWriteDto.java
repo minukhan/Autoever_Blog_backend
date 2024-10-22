@@ -18,6 +18,7 @@ public class PostWriteDto {
     private String postCategory;
     private String postSummary;
     private String postContent;
+    private String plainText;
 //    private String thumbnailUrl;
 
 }

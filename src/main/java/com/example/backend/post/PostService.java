@@ -1,9 +1,13 @@
 package com.example.backend.post;
 
 
+import com.example.backend.user.UserEntity;
+import com.example.backend.user.UserRepository;
 import com.example.backend.utils.S3Util;
+import com.example.backend.utils.VoiceUtil;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,18 +20,43 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Builder
+@Log4j2
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final S3Util s3Util;
+    private final VoiceUtil voiceUtil;
 
     @Transactional
     public Long createPost(PostWriteDto postWriteDto, MultipartFile thumbnailUrl) {
 
+        // s3
         String directory = "images";
         String s3ThumbUrl = s3Util.upload(directory, thumbnailUrl);
 
+        // user테이블에서 user_voice_select 값 가져오기
+        // user 테이블에서 user_voice_select, user_voice_id 값 가져오기
+        UserEntity user = userRepository.findById(postWriteDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        String userVoiceSelect = user.getUserVoiceSelect();
+        String userVoiceId = user.getUserVoiceId();
+
+
+        // 음성 생성 및 URL 반환
+        MultipartFile audioUrl = null;
+        if ("ME".equals(userVoiceSelect)) {
+            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
+        } else if ("WOMAN".equals(userVoiceSelect)) {
+            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), "uyVNoMrnUku1dZyVEXwD");
+        } else if ("MAN".equals(userVoiceSelect)) {
+            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
+        }
+        log.info("############################" + audioUrl);
+
+
+        // db 값 넣기
         PostEntity postEntity = PostEntity.builder()
                 .userId(postWriteDto.getUserId())
                 .postTitle(postWriteDto.getPostTitle())
