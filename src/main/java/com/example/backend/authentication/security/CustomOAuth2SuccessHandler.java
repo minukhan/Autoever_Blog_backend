@@ -66,6 +66,6 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // JWT를 JSON으로 클라이언트에 반환
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"token\": \"" + jwtToken + "\"}");
+        response.getWriter().write("{\"token\": \"" + jwtToken + "\", \"profileImage\": \"" + profileImage + "\"}");
     }
 }
