@@ -37,9 +37,11 @@ public class PostController {
         log.info("Summary: " + summary);
         log.info("Content: " + content);
         log.info("Image Name: " + image.getOriginalFilename());
+        String url = postService.createPost(title, summary, content, image);
+
 
         // 성공 응답 반환
-        return new ResponseEntity<>("Post created successfully!", HttpStatus.CREATED);
+        return new ResponseEntity<>(url, HttpStatus.CREATED);
     }
 
 //    @PostMapping
