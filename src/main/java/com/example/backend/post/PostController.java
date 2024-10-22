@@ -22,26 +22,28 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
-
     @PostMapping
-    public ResponseEntity<String> createPost(
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("title") String title,
-            @RequestParam("summary") String summary,
-            @RequestParam("content") String content) {
+    public ResponseEntity<Long> createPost(
+            @ModelAttribute PostWriteDto postWriteDto,
+            @RequestParam("thumbnailUrl") MultipartFile thumbnailUrl // 이미지 파일을 받을 때 사용
+    ) {
 
         // 파일 및 데이터 처리 로직
         // 예를 들어, 파일 저장, 데이터베이스에 저장 등을 수행
 
-        log.info("Title: " + title);
-        log.info("Summary: " + summary);
-        log.info("Content: " + content);
-        log.info("Image Name: " + image.getOriginalFilename());
-        String url = postService.createPost(title, summary, content, image);
+        log.info("Title~~~~~~~~~~~~~~: " + postWriteDto);
+        log.info("Title~~~~~~~~~~~~~~: " + thumbnailUrl);
+
+        Long postId = Long.valueOf(postService.createPost(postWriteDto, thumbnailUrl));
+
+//        Long postId = postService.createPost(postWriteDto);
 
 
         // 성공 응답 반환
-        return new ResponseEntity<>(url, HttpStatus.CREATED);
+//        return new ResponseEntity<>(url, HttpStatus.CREATED);
+//        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        return ResponseEntity.status(HttpStatus.CREATED).body(postId);
+
     }
 
 //    @PostMapping

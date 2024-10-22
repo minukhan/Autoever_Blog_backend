@@ -16,7 +16,8 @@ public class PostWriteDto {
     private Long userId;
     private String postTitle;
     private String postCategory;
-    private String thumbnailUrl;
     private String postSummary;
     private String postContent;
+//    private String thumbnailUrl;
+
 }

@@ -22,37 +22,26 @@ public class PostService {
     private final S3Util s3Util;
 
     @Transactional
-    public String createPost(String title, String summary, String content, MultipartFile image){
+    public Long createPost(PostWriteDto postWriteDto, MultipartFile thumbnailUrl) {
 
-        // Repository를 사용하여 게시글 정보를 DB에 저장한다.
-
-
-        // 저장한 정보에서 postId 정보를 추출하고, 썸네일 이미지를 S3에 저장한다.
-        String postId = "1"; // FIXME: postId 가져오게 수정
-        String directory = "images/" + postId;
-        return s3Util.upload(directory, image);
-
-        // dirty checking을 통해 썸네일 이미지를 저장한다.
+        String directory = "images";
+        String s3ThumbUrl = s3Util.upload(directory, thumbnailUrl);
 
 
+        PostEntity postEntity = PostEntity.builder()
+                .userId(postWriteDto.getUserId())
+                .postTitle(postWriteDto.getPostTitle())
+                .postCategory(postWriteDto.getPostCategory())
+                .thumbnailUrl(s3ThumbUrl)
+                .postSummary(postWriteDto.getPostSummary())
+                .postContent(postWriteDto.getPostContent())
+//                .audioUrl(postWriteDto.getAudioUrl())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
-        // /images폴더/postId/imageurl
-
-
-//        PostEntity postEntity = PostEntity.builder()
-//                .userId(postWriteDto.getUserId())
-//                .postTitle(postWriteDto.getPostTitle())
-//                .postCategory(postWriteDto.getPostCategory())
-//                .thumbnailUrl(postWriteDto.getThumbnailUrl())
-//                .postSummary(postWriteDto.getPostSummary())
-//                .postContent(postWriteDto.getPostContent())
-////                .audioUrl(postWriteDto.getAudioUrl())
-//                .createdAt(LocalDateTime.now())
-//                .updatedAt(LocalDateTime.now())
-//                .build();
-
-//        PostEntity savedPost = postRepository.save(postEntity);
-//        return savedPost.getPostId();
+        PostEntity savedPost = postRepository.save(postEntity);
+        return savedPost.getPostId();
     }
 
     //게시글 조회
