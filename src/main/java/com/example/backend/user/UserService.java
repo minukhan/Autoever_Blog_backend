@@ -1,7 +1,5 @@
 package com.example.backend.user;
 
-import com.example.backend.domain.UserEntity;
-import com.example.backend.domain.UserVoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,22 +11,20 @@ public class UserService {
     //사용자 상세정보 조회
     public UserDetailDto getUserinfo(Long userId){
         UserEntity user = userRepository.findById(userId).orElseThrow();
-
+        System.out.println(UserVoice.valueOf(user.getUserVoiceSelect()));
         return UserDetailDto.builder()
                 .isSuccess(true)
                 .message("사용자 상세정보 조회 성공")
                 .data(
                         UserDetailDto.Data.builder()
-                                .userId(user.getUser_id())
-                                .email(user.getUser_email())
-                                .profileImg(user.getUser_profile_url())
-                                .nickname(user.getUser_nickname())
-                                .voice(user.getUser_voice_id())
+                                .userId(user.getUserId())
+                                .name(user.getUserName())
+                                .voice(UserVoice.valueOf(user.getUserVoiceSelect()))
                                 .social(
                                         UserDetailDto.Social.builder()
-                                                .github(user.getUser_github())
-                                                .instagram(user.getUser_insta())
-                                                .twitter(user.getUser_twitter())
+                                                .github(user.getUserGithub())
+                                                .instagram(user.getUserInsta())
+                                                .twitter(user.getUserTwitter())
                                                 .build()
                                 )
                                 .build()
@@ -37,22 +33,21 @@ public class UserService {
     }
 
     // 사용자 상세 정보 수정
+    //사용자 프로필 수정 불가 -> 닉네임, 선택 보이스 변경만
     public void modifyUserInfo(UserRequestDto userRequestDto){
         UserEntity user = userRepository.findById(userRequestDto.getUserId()).orElseThrow();
-        user.setUser_profile_url(userRequestDto.getProfileImg());
-        user.setUser_email(userRequestDto.getEmail());
-        user.setUser_nickname(userRequestDto.getNickname());
-        user.setUser_voice_select(userRequestDto.getVoiceselect());
+        user.changeUserName(userRequestDto.getName());
+        user.changeUserVoiceSelect(userRequestDto.getVoiceSelect().toString());
         userRepository.save(user);
     }
 
     //사용자 blog 소개 + social link 수정
     public void modifyUserSocial(UserRequestDto userRequestDto){
         UserEntity user = userRepository.findById(userRequestDto.getUserId()).orElseThrow();
-        user.setUser_intro(userRequestDto.getIntro());
-        user.setUser_github(userRequestDto.getGithub());
-        user.setUser_insta(userRequestDto.getInsta());
-        user.setUser_twitter(userRequestDto.getTwitter());
+        user.changeUserIntro(userRequestDto.getIntro());
+        user.changeUserGithub(userRequestDto.getGithub());
+        user.changeUserInsta(userRequestDto.getInsta());
+        user.changeUserTwitter(userRequestDto.getTwitter());
         userRepository.save(user);
     }
 }

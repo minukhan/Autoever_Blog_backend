@@ -21,10 +21,8 @@ public class UserDetailDto {
     @NoArgsConstructor
     public static class Data{
         private Long userId;
-        private String email;
-        private String profileImg;
-        private String nickname;
-        private String voice;
+        private String name;
+        private UserVoice voice;
 
         private Social social;
     }

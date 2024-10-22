@@ -51,8 +51,7 @@ public class UserController {
                             .path("/api/users/"+userId)
                             .build()
             );
-        }
-    }
+        }    }
 
     //사용자 social link 수정
     @PutMapping("/{userId}/social")
