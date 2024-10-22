@@ -20,11 +20,10 @@ public class UserEntity {
     private Long userId;
 
     private String userName;
-    private String userEmail;
-    private String userGender;
     private String userRefreshToken;
     private String userProfileImage;
     private String userIntro;
+    private String userVoiceId;
     private String userVoiceSelect;
     private String userGithub;
     private String userInsta;
@@ -38,14 +37,6 @@ public class UserEntity {
         this.userName = userName;
     }
 
-    public void changeUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public void changeUserGender(String userGender) {
-        this.userGender = userGender;
-    }
-
     public void changeUserRefreshToken(String userRefreshToken) {
         this.userRefreshToken = userRefreshToken;
     }
@@ -56,6 +47,10 @@ public class UserEntity {
 
     public void changeUserIntro(String userIntro) {
         this.userIntro = userIntro;
+    }
+
+    public void changeUserVoiceId(String userVoiceId) {
+        this.userVoiceId = userVoiceId;
     }
 
     public void changeUserVoiceSelect(String userVoiceSelect) {
