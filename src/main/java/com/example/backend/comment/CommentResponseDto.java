@@ -1,6 +1,7 @@
-package com.example.backend.post;
+package com.example.backend.comment;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,18 +10,12 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDto {
-
+@Builder
+public class CommentResponseDto {
+    private Long commentId;
     private Long postId;
     private Long userId;
-    private String postTitle;
-    private String postCategory;
-    private String thumbnailUrl;
-    private String postSummary;
-    private String postContent;
-    private String audioUrl;
+    private String commentContent;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean isDeleted;
-
 }
