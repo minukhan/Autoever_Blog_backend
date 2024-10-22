@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Builder
@@ -24,11 +26,18 @@ public class PostService {
                 .postSummary(postDto.getPostSummary())
                 .postContent(postDto.getPostContent())
                 .audioUrl(postDto.getAudioUrl())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isDeleted(false)
                 .build();
 
         PostEntity savedPost = postRepository.save(postEntity);
         return savedPost.getPostId();
 
     }
+
+    //게시글 조회
+
+
 
 }
