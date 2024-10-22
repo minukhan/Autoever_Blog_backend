@@ -45,16 +45,16 @@ public class PostService {
 
 
         // 음성 생성 및 URL 반환
-        MultipartFile audioUrl = null;
+        String s3Url = null;
         if ("ME".equals(userVoiceSelect)) {
-            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
         } else if ("WOMAN".equals(userVoiceSelect)) {
-            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), "uyVNoMrnUku1dZyVEXwD");
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "uyVNoMrnUku1dZyVEXwD");
         } else if ("MAN".equals(userVoiceSelect)) {
-            audioUrl = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
         }
-        log.info("############################" + audioUrl);
 
+//        log.info("#########################################s3 url: " + s3Url);
 
         // db 값 넣기
         PostEntity postEntity = PostEntity.builder()
@@ -64,12 +64,13 @@ public class PostService {
                 .thumbnailUrl(s3ThumbUrl)
                 .postSummary(postWriteDto.getPostSummary())
                 .postContent(postWriteDto.getPostContent())
-//                .audioUrl(postWriteDto.getAudioUrl())
+                .audioUrl(s3Url)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
 
         PostEntity savedPost = postRepository.save(postEntity);
+
         return savedPost.getPostId();
     }
 

@@ -16,7 +16,7 @@ public class VoiceUtil {
 
     private final S3Util s3Util;
 
-    public MultipartFile generateVoice(String text, String userVoiceId) {
+    public String generateVoice(String text, String userVoiceId) {
         String modelId = "eleven_multilingual_v2"; // 적합한 모델 ID로 교체
 
         // 요청 본문에 model_id 추가
@@ -37,22 +37,21 @@ public class VoiceUtil {
                     .header("Content-Type", "application/json")
                     .body(requestBody)
                     .asBytes();
+            // response = kong.unirest.ByteResponse@5d842f8c
 
-            log.info("!@!@@@@@@@@@@@@!#@!#########################)@@@@@@@@@@@@@@@@" + response);
             if (response.getStatus() == 200) {
                 // S3에 업로드할 파일 이름 생성
                 String fileName = "voice_" + System.currentTimeMillis() + ".mp3";
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(response.getBody());
 
                 // MultipartFile로 변환
-                MultipartFile audioFile = new InMemoryMultipartFile(fileName, response.getBody(), "audio/mpeg");
+                MultipartFile audioFile = new InMemoryMultipartFile(fileName, response.getBody(), "audio/mpeg"); // com.example.backend.utils.VoiceUtil$InMemoryMultipartFile@d93f867
 
                 // S3에 업로드
-                log.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" + audioFile);
                 String s3Url = s3Util.upload("voices", audioFile);
 
                 // 업로드된 URL을 반환 (필요에 따라 반환 형식 조정 가능)
-                return audioFile; // 또는 S3 URL을 반환할 수도 있음
+                return s3Url; // 또는 S3 URL을 반환할 수도 있음
             } else {
                 throw new RuntimeException("음성 생성 실패: " + response.getStatus() + " - " + new String(response.getBody()));
             }

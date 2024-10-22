@@ -28,30 +28,12 @@ public class PostController {
             @RequestParam("thumbnailUrl") MultipartFile thumbnailUrl // 이미지 파일을 받을 때 사용
     ) {
 
-        Long postId = Long.valueOf(postService.createPost(postWriteDto, thumbnailUrl));
+        Long postId = postService.createPost(postWriteDto, thumbnailUrl);
 
-//        Long postId = postService.createPost(postWriteDto);
-
-
-        // 성공 응답 반환
-//        return new ResponseEntity<>(url, HttpStatus.CREATED);
-//        return ResponseEntity.status(HttpStatus.CREATED).body("");
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
-
     }
 
-//    @PostMapping
-//    public ResponseEntity<Long> createPost(@RequestBody PostWriteDto postWriteDto) {
-//        System.out.println("###############################" + postWriteDto);
-////        Long postId = postService.createPost(postWriteDto);
-//
-//        return ResponseEntity.ok(postId);
-//    }
-//
-//    @GetMapping
-//    public List<PostDto> getAllPosts(){
-//        return postService.getAllPosts();
-//    }
+
 
     // 특정 게시글 조회
     @GetMapping("/{postId}")
