@@ -41,4 +41,17 @@ public class PostController {
         return postService.getUserPosts(userId);
     }
 
+    @PutMapping("/{postId}")
+    public PostDto updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
+        return postService.updatePost(postId, postDto);
+    }
+
+    @DeleteMapping("/{postId}")
+    public String deletePost(@PathVariable Long postId){
+        postService.deletePost(postId);
+        return postId + " 삭제 완료 " ;
+    }
+
+
+
 }
