@@ -102,6 +102,7 @@ public class PostService {
     }
 
     //특정 게시글 조회
+    //특정 게시글 조회
     public PostDto getPostById(@PathVariable Long postId){
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
@@ -111,6 +112,8 @@ public class PostService {
                 .userId(post.getUserId())
                 .postTitle(post.getPostTitle())
                 .postCategory(post.getPostCategory())
+                .postContent(post.getPostContent())
+                .audioUrl(post.getAudioUrl())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
                 .isDeleted(post.getIsDeleted())
