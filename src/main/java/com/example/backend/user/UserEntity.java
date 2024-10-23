@@ -82,4 +82,8 @@ public class UserEntity {
     public void changeDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
+
+    public void changeUserVoiceId(String userVoiceId) {
+        this.userVoiceId = userVoiceId;
+    }
 }

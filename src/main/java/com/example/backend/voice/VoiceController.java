@@ -23,8 +23,8 @@ public class VoiceController {
             @RequestParam("voiceUrl") MultipartFile[] voiceUrl
     ) throws IOException {
 
-        String voiceId = voiceService.createVoice(userId, voiceUrl);
-        log.info("#######################Voice created##################: " + voiceId);
-        return ResponseEntity.ok(voiceId);
+        String s3Url = voiceService.createVoice(userId, voiceUrl);
+        log.info("#######################Voice created##################: " + s3Url);
+        return ResponseEntity.ok(s3Url);
     }
 }

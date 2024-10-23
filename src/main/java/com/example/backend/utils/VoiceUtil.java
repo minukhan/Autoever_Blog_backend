@@ -1,11 +1,13 @@
 package com.example.backend.utils;
 
+import com.example.backend.voice.VoiceIdResponse;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 
@@ -16,7 +18,7 @@ public class VoiceUtil {
 
     private final S3Util s3Util;
 
-    public String createVoiceId(Long name, MultipartFile[] files) throws IOException {
+    public VoiceIdResponse createVoiceId(Long name, MultipartFile[] files) throws IOException {
         // Unirest로 multipart/form-data 요청을 보냄
         var request = Unirest.post("https://api.elevenlabs.io/v1/voices/add")
                 .header("xi-api-key", "sk_dd3e66d094ebadc941c704104af955edffa33f77acebad6c")
@@ -31,7 +33,12 @@ public class VoiceUtil {
         // 요청을 보낸 후 응답을 문자열로 받음
         HttpResponse<String> response = request.asString(); // 요청을 실행하고 응답을 받음
 
-        return response.getBody(); // 응답의 본문 반환
+//        return response.getBody(); // 응답의 본문 반환
+
+        // JSON 응답을 DTO로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(response.getBody(), VoiceIdResponse.class); // DTO 반환
+
     }
 
 
