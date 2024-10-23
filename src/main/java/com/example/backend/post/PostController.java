@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class PostController {
     private final PostService postService;
 
