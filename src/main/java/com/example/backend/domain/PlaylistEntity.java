@@ -19,7 +19,6 @@ public class PlaylistEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long playlistId;
-
     private Long userId;
     private Long postId;
     private String thumbnailUrl;
