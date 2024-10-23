@@ -1,6 +1,8 @@
 package com.example.backend.post;
 
 
+import com.example.backend.comment.CommentRequestDto;
+import com.example.backend.comment.CommentResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +52,21 @@ public class PostController {
     public String deletePost(@PathVariable Long postId){
         postService.deletePost(postId);
         return postId + " 삭제 완료 " ;
+    }
+    //카테고리별 조회
+    @GetMapping("/category/{category}")
+    public List<PostDto> getPostsByCategory(@PathVariable String category){
+        return postService.getPostsByCategory(category);
+    }
+
+    //댓글 등록
+    @PostMapping("/{postId}/comments")
+    public CommentResponseDto createComment(
+            @PathVariable Long postId, // postId를 PathVariable로 받음
+            @RequestBody CommentRequestDto requestDto) {
+
+        // postId와 requestDto를 사용하여 댓글을 생성
+        return postService.createComment(postId, requestDto);
     }
 
 

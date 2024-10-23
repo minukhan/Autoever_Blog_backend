@@ -28,7 +28,7 @@ public class PlayListController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<PlayListDto>> getAllPlaylist(@PathVariable Long userId){
-        List<PlayListDto> playList = playListService.getAllPlaylist(userId);
+        List<PlayListDto> playList = playListService.getPlayListByUser(userId);
         return ResponseEntity.ok(playList);
     }
 
@@ -40,5 +40,6 @@ public class PlayListController {
         playListService.deletePlaylist(userId,playListId);
         return ResponseEntity.noContent().build();
     }
+
 
 }

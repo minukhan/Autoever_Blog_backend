@@ -17,15 +17,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    //댓글 등록
-    @PostMapping("/{postId}/comments")
-    public CommentResponseDto createComment(
-            @PathVariable Long postId, // postId를 PathVariable로 받음
-            @RequestBody CommentRequestDto requestDto) {
 
-        // postId와 requestDto를 사용하여 댓글을 생성
-        return commentService.createComment(postId, requestDto);
-    }
 
     //댓글 삭제
     @DeleteMapping("/{commentId}")

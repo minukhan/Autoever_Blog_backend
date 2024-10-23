@@ -1,4 +1,4 @@
-package com.example.backend.domain;
+package com.example.backend.comment;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,21 +8,23 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "playList")
-public class PlaylistEntity {
+@Table(name = "comment")
+public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long playlistId;
-    private Long userId;
+    private Long commentId;
+
     private Long postId;
-    private String thumbnailUrl;
-    private String audioUrl;
+    private Long userId;
+    private String commentContent;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

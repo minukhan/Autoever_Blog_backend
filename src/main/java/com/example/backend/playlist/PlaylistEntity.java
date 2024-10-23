@@ -1,5 +1,4 @@
-package com.example.backend.domain;
-
+package com.example.backend.playlist;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,29 +8,21 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Builder
-@Table(name = "post")
-public class PostEntity {
+@Table(name = "playList")
+public class PlaylistEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
-
+    private Long playlistId;
     private Long userId;
-    private String postTitle;
-    private String postCategory;
+    private Long postId;
     private String thumbnailUrl;
-    private String postSummary;
-    private String postContent;
     private String audioUrl;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Boolean isDeleted;
-
 
 }

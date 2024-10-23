@@ -1,8 +1,7 @@
 package com.example.backend.playlist;
 
-import com.example.backend.domain.PlaylistEntity;
-import com.example.backend.domain.PostEntity;
-import com.example.backend.domain.UserEntity;
+import com.example.backend.post.PostEntity;
+import com.example.backend.user.UserEntity;
 import com.example.backend.post.PostRepository;
 import com.example.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,6 +23,7 @@ public class PlayListService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    //플레이 리스트 등록
     @Transactional
     public PlayListDto savePostAsPlaylist(Long userId, Long postId, PlayListDto playListDto) {
         // 사용자 정보를 조회
@@ -57,8 +56,9 @@ public class PlayListService {
                 .build();
     }
 
+    // 유저별 플레이 리스트 조회
     @Transactional
-    public List<PlayListDto> getAllPlaylist(@PathVariable Long userId){
+    public List<PlayListDto> getPlayListByUser(@PathVariable Long userId){
         List<PlaylistEntity> playlists = playlistRepository.findByUserId(userId);
         if (playlists.isEmpty()) {
             throw new IllegalArgumentException("해당 ID의 사용자는 플레이리스트가 없습니다.");
@@ -74,6 +74,8 @@ public class PlayListService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    // 플레이 리스트 삭제
     @Transactional
     public void deletePlaylist(Long userId, Long playListId){
         PlaylistEntity playlist = playlistRepository.findByUserIdAndPlaylistId(userId,playListId)
