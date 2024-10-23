@@ -11,18 +11,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class PostDto {
+public class PostWriteDto {
 
-    private Long postId;
     private Long userId;
     private String postTitle;
     private String postCategory;
-    private String thumbnailUrl;
     private String postSummary;
     private String postContent;
-    private String audioUrl;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Boolean isDeleted;
+    private String plainText;
+//    private String thumbnailUrl;
 
 }

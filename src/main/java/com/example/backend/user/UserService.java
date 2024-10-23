@@ -1,13 +1,14 @@
 package com.example.backend.user;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.backend.authentication.AuthUserDto;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
 
+    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     //사용자 상세정보 조회
     public UserDetailDto getUserinfo(Long userId){
         UserEntity user = userRepository.findById(userId).orElseThrow();
@@ -50,6 +51,30 @@ public class UserService {
         user.changeUserGithub(userRequestDto.getGithub());
         user.changeUserInsta(userRequestDto.getInsta());
         user.changeUserTwitter(userRequestDto.getTwitter());
+        userRepository.save(user);
+    }
+
+    // 기존 사용자인지 확인하는 메서드
+    public UserEntity findUserByKakaoId(String kakaoId) {
+        return userRepository.findById(Long.valueOf(kakaoId)).orElse(null);
+    }
+
+    // 회원가입 처리
+    public void registerUser(AuthUserDto authUserDto) {
+        UserEntity user = UserEntity.builder()
+                .userId(Long.valueOf(authUserDto.getKakaoId()))
+                .userName(authUserDto.getNickname())
+                .userProfileImage(authUserDto.getProfileImage())
+                .userRefreshToken(authUserDto.getRefreshToken())
+                .build();
+        userRepository.save(user);
+    }
+
+    // 기존 회원 정보 업데이트
+    public void updateExistingUser(UserEntity user, AuthUserDto authUserDto) {
+        user.changeUserName(authUserDto.getNickname());
+        user.changeUserProfileImage(authUserDto.getProfileImage());
+        user.changeUserRefreshToken(authUserDto.getRefreshToken());
         userRepository.save(user);
     }
 }
