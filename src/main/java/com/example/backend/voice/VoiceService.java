@@ -34,7 +34,7 @@ public class VoiceService {
             log.info("###############################User voice ID updated: userId={}, voiceId={}", userId, voiceIdResponse.getVoice_id());
 
             // s3 url 받기
-            String testScript = "이 음성은 회원님의 회원님의 목소리를 AI가 분석해 모델링한 AI 목소리입니다.";
+            String testScript = "이 음성은 회원님의 목소리를 AI가 분석해 모델링한 AI 목소리입니다.";
 
             return voiceUtil.generateVoice(testScript, voiceIdResponse.getVoice_id()); // S3 URL 반환
         } else {
