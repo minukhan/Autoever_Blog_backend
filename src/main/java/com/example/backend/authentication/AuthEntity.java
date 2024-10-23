@@ -1,4 +1,5 @@
 package com.example.backend.authentication;
 
-public class AuthDto {
+//@Entity
+public class AuthEntity {
 }
