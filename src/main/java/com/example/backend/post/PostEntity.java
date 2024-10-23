@@ -1,5 +1,7 @@
 package com.example.backend.post;
 
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,13 +9,19 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
-public class PostDto {
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Entity
+@Builder
+@Table(name = "post")
+public class PostEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
+
     private Long userId;
     private String postTitle;
     private String postCategory;
@@ -24,5 +32,6 @@ public class PostDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isDeleted;
+
 
 }
