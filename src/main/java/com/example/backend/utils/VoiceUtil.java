@@ -16,6 +16,26 @@ public class VoiceUtil {
 
     private final S3Util s3Util;
 
+    public String createVoiceId(Long name, MultipartFile[] files) throws IOException {
+        // Unirest로 multipart/form-data 요청을 보냄
+        var request = Unirest.post("https://api.elevenlabs.io/v1/voices/add")
+                .header("xi-api-key", "sk_dd3e66d094ebadc941c704104af955edffa33f77acebad6c")
+                .field("name", name)  // name 필드 추가
+                .field("remove_background_noise", "true");  // remove_background_noise 필드를 고정값 false로 추가
+
+        // 파일 부분 추가
+        for (MultipartFile file : files) {
+            request.field("files", file.getBytes(), file.getOriginalFilename());  // 파일 추가
+        }
+
+        // 요청을 보낸 후 응답을 문자열로 받음
+        HttpResponse<String> response = request.asString(); // 요청을 실행하고 응답을 받음
+
+        return response.getBody(); // 응답의 본문 반환
+    }
+
+
+
     public String generateVoice(String text, String userVoiceId) {
         String modelId = "eleven_multilingual_v2"; // 적합한 모델 ID로 교체
 
