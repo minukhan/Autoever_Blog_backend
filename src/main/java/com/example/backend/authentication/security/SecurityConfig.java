@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 나머지 모든 경로는 인증 필요
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login/kakao") // 로그인 버튼을 눌렀을 때만 OAuth2 로그인 트리거
                         .successHandler(customOAuth2SuccessHandler) // 로그인 성공 시 JWT 발급 등 추가 처리
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))// JWT 인증 설정
