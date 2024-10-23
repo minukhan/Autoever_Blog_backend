@@ -78,6 +78,8 @@ public class PostService {
                 .userId(post.getUserId())
                 .postTitle(post.getPostTitle())
                 .postCategory(post.getPostCategory())
+                .postContent(post.getPostContent())
+                .audioUrl(post.getAudioUrl())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
                 .isDeleted(post.getIsDeleted())
