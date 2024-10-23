@@ -23,7 +23,7 @@ public class UserDetailDto {
         private Long userId;
         private String name;
         private UserVoice voice;
-
+        private String profileImg;
         private Social social;
     }
 
@@ -32,6 +32,7 @@ public class UserDetailDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Social{
+        private String intro;
         private String github;
         private String instagram;
         private String twitter;

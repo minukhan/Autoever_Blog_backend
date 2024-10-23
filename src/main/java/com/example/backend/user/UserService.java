@@ -20,8 +20,10 @@ public class UserService {
                                 .userId(user.getUserId())
                                 .name(user.getUserName())
                                 .voice(UserVoice.valueOf(user.getUserVoiceSelect()))
+                                .profileImg(user.getUserProfileImage())
                                 .social(
                                         UserDetailDto.Social.builder()
+                                                .intro(user.getUserIntro())
                                                 .github(user.getUserGithub())
                                                 .instagram(user.getUserInsta())
                                                 .twitter(user.getUserTwitter())
