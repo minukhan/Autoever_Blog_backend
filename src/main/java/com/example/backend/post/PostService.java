@@ -42,16 +42,16 @@ public class PostService {
         String directory = "images";
         String s3ThumbUrl = s3Util.upload(directory, thumbnailUrl);
 
-        // user테이블에서 user_voice_select 값 가져오기
-        // user 테이블에서 user_voice_select, user_voice_id 값 가져오기
+        // user 테이블에서 user_voice_select, user_voice_id, user_name 값 가져오기
         UserEntity user = userRepository.findById(postWriteDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         String userVoiceSelect = user.getUserVoiceSelect();
         String userVoiceId = user.getUserVoiceId();
-
+        String userName = user.getUserName(); // userName 가져오기
 
         // 음성 생성 및 URL 반환
+
         String s3Url = null;
         if ("ME".equals(userVoiceSelect)) {
             s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
@@ -61,11 +61,10 @@ public class PostService {
             s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
         }
 
-//        log.info("#########################################s3 url: " + s3Url);
-
         // db 값 넣기
         PostEntity postEntity = PostEntity.builder()
                 .userId(postWriteDto.getUserId())
+                .userName(userName) // userName 등록
                 .postTitle(postWriteDto.getPostTitle())
                 .postCategory(postWriteDto.getPostCategory())
                 .thumbnailUrl(s3ThumbUrl)
@@ -81,7 +80,6 @@ public class PostService {
         return savedPost.getPostId();
     }
 
-
     //특정 게시글 조회
     public PostDto getPostById(@PathVariable Long postId){
         PostEntity post = postRepository.findById(postId)
@@ -92,12 +90,11 @@ public class PostService {
                 .userId(post.getUserId())
                 .postTitle(post.getPostTitle())
                 .postCategory(post.getPostCategory())
-                .postContent(post.getPostContent())
-                .audioUrl(post.getAudioUrl())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
                 .isDeleted(post.getIsDeleted())
                 .createdAt(post.getCreatedAt())
+                .userName(post.getUserName())
                 .updatedAt(post.getUpdatedAt())
                 .build();
     }
@@ -117,6 +114,7 @@ public class PostService {
                         .audioUrl(post.getAudioUrl())
                         .isDeleted(post.getIsDeleted())
                         .createdAt(post.getCreatedAt())
+                        .userName(post.getUserName())
                         .updatedAt(post.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
@@ -153,6 +151,7 @@ public class PostService {
                 .postContent(post.getPostContent())
                 .audioUrl(post.getAudioUrl())
                 .isDeleted(post.getIsDeleted())
+                .userName(post.getUserName())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
