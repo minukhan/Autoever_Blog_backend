@@ -7,13 +7,16 @@ import com.example.backend.comment.CommentRequestDto;
 import com.example.backend.comment.CommentResponseDto;
 import com.example.backend.user.UserEntity;
 import com.example.backend.user.UserRepository;
+import com.example.backend.utils.S3Util;
+import com.example.backend.utils.VoiceUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +25,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Builder
+@Log4j2
 public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository CommentRepository;
     private final UserRepository userRepository;
+    private final S3Util s3Util;
+    private final VoiceUtil voiceUtil;
+
     // 게시글 작성
     @Transactional
     public Long createPost(PostDto postDto){
@@ -56,10 +63,8 @@ public class PostService {
     //게시글 조회
     @Transactional
     public List<PostDto> getAllPosts(){
-
         List<PostEntity> posts = postRepository.findAll();
         return posts.stream().map(post -> PostDto.builder()
-                        .userName(post.getUserName())
                         .postId(post.getPostId())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
@@ -82,12 +87,9 @@ public class PostService {
 
         return PostDto.builder()
                 .postId(post.getPostId())
-                .userName(post.getUserName())
                 .userId(post.getUserId())
                 .postTitle(post.getPostTitle())
                 .postCategory(post.getPostCategory())
-                .postContent(post.getPostContent())
-                .audioUrl(post.getAudioUrl())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
                 .isDeleted(post.getIsDeleted())
@@ -102,7 +104,6 @@ public class PostService {
         List<PostEntity> posts = postRepository.findByUserId(userId);
         return posts.stream().map(post -> PostDto.builder()
                         .postId(post.getPostId())
-                        .userName(post.getUserName())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
                         .postCategory(post.getPostCategory())
@@ -171,7 +172,6 @@ public class PostService {
         return posts.stream()
                 .map(post -> PostDto.builder()
                         .postId(post.getPostId())
-                        .userName(post.getUserName())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
                         .postCategory(post.getPostCategory())

@@ -13,13 +13,9 @@ public class UserDto {
 
     private Long user_id;
 
-    private String user_pw;
     private String user_name;
-    private String user_email;
-    private String user_gender;
     private String user_refresh_token;
     private String user_profile_image;
-    private String user_nickname;
     private String user_intro;
     private String user_voice_id;
     private String user_github;
@@ -29,5 +25,5 @@ public class UserDto {
     private LocalDateTime updatedAt;
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
-
+    private UserVoice user_voice_select;
 }
