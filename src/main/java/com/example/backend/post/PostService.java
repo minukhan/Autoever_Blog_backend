@@ -81,27 +81,7 @@ public class PostService {
         return savedPost.getPostId();
     }
 
-    //게시글 조회
-    @Transactional
-    public List<PostDto> getAllPosts(){
-        List<PostEntity> posts = postRepository.findAll();
-        return posts.stream().map(post -> PostDto.builder()
-                        .postId(post.getPostId())
-                        .userId(post.getUserId())
-                        .postTitle(post.getPostTitle())
-                        .postCategory(post.getPostCategory())
-                        .thumbnailUrl(post.getThumbnailUrl())
-                        .postSummary(post.getPostSummary())
-                        .postContent(post.getPostContent())
-                        .audioUrl(post.getAudioUrl())
-                        .isDeleted(post.getIsDeleted())
-                        .createdAt(post.getCreatedAt())
-                        .updatedAt(post.getUpdatedAt())
-                        .build())
-                .collect(Collectors.toList());
-    }
 
-    //특정 게시글 조회
     //특정 게시글 조회
     public PostDto getPostById(@PathVariable Long postId){
         PostEntity post = postRepository.findById(postId)
@@ -188,25 +168,63 @@ public class PostService {
 
     }
 
+
+    //게시글 조회
+    @Transactional
+    public List<PostsDto> getAllPosts(){
+        List<PostEntity> posts = postRepository.findAll();
+        return posts.stream()
+                .map(post -> {
+                    // 사용자 정보를 가져오기
+                    UserEntity user = userRepository.findById(post.getUserId()).orElse(null);
+                    String userName = (user != null) ? user.getUserName() : null; // 닉네임을 가져오기
+
+//                    System.out.println("!!!!!!!!!!!!!!!!1Post ID: " + post.getPostId() + ", User Name: " + userName);
+                    return PostsDto.builder()
+                            .postId(post.getPostId())
+                            .userId(post.getUserId())
+                            .userName(userName) // 닉네임 추가
+                            .postTitle(post.getPostTitle())
+                            .postCategory(post.getPostCategory())
+                            .thumbnailUrl(post.getThumbnailUrl())
+                            .postSummary(post.getPostSummary())
+                            .postContent(post.getPostContent())
+                            .audioUrl(post.getAudioUrl())
+                            .isDeleted(post.getIsDeleted())  // 삭제 여부 추가
+                            .createdAt(post.getCreatedAt())
+                            .updatedAt(post.getUpdatedAt())  // 업데이트 시간 추가
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
     //카테고리별 게시글 조회
     @Transactional
-    public List<PostDto> getPostsByCategory(String category){
+    public List<PostsDto> getPostsByCategory(String category){
         List<PostEntity> posts = postRepository.findBypostCategory(category);
 
         return posts.stream()
-                .map(post -> PostDto.builder()
-                        .postId(post.getPostId())
-                        .userId(post.getUserId())
-                        .postTitle(post.getPostTitle())
-                        .postCategory(post.getPostCategory())
-                        .thumbnailUrl(post.getThumbnailUrl())
-                        .postSummary(post.getPostSummary())
-                        .postContent(post.getPostContent())
-                        .audioUrl(post.getAudioUrl())
-                        .isDeleted(post.getIsDeleted())  // 삭제 여부 추가
-                        .createdAt(post.getCreatedAt())
-                        .updatedAt(post.getUpdatedAt())  // 업데이트 시간 추가
-                        .build())
+                .map(post -> {
+                    // 사용자 정보를 가져오기
+                    UserEntity user = userRepository.findById(post.getUserId()).orElse(null);
+                    String userName = (user != null) ? user.getUserName() : null; // 닉네임을 가져오기
+
+                    System.out.println("!!!!!!!!!!!!!!!!1Post ID: " + post.getPostId() + ", User Name: " + userName);
+                    return PostsDto.builder()
+                            .postId(post.getPostId())
+                            .userId(post.getUserId())
+                            .userName(userName) // 닉네임 추가
+                            .postTitle(post.getPostTitle())
+                            .postCategory(post.getPostCategory())
+                            .thumbnailUrl(post.getThumbnailUrl())
+                            .postSummary(post.getPostSummary())
+                            .postContent(post.getPostContent())
+                            .audioUrl(post.getAudioUrl())
+                            .isDeleted(post.getIsDeleted())  // 삭제 여부 추가
+                            .createdAt(post.getCreatedAt())
+                            .updatedAt(post.getUpdatedAt())  // 업데이트 시간 추가
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
