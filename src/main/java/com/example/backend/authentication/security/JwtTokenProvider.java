@@ -16,7 +16,7 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret-key}")
     private String secretKey;  // 비밀 키
-    private static final long EXPIRATION_TIME = 86400000;  // 24시간 유효
+    private static final long EXPIRATION_TIME = 3 * 24 * 60 * 60 * 1000L;  // 3일 유효
 
     public String createToken(String kakaoId, String nickname) {
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
