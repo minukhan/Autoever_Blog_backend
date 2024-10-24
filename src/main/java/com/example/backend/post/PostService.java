@@ -36,28 +36,48 @@ public class PostService {
 
     // 게시글 작성
     @Transactional
-    public Long createPost(PostDto postDto){
+    public Long createPost(PostWriteDto postWriteDto, MultipartFile thumbnailUrl) {
 
-        UserEntity user = userRepository.findByUserId(postDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
+        // s3
+        String directory = "images";
+        String s3ThumbUrl = s3Util.upload(directory, thumbnailUrl);
 
+        // user 테이블에서 user_voice_select, user_voice_id, user_name 값 가져오기
+        UserEntity user = userRepository.findById(postWriteDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        String userVoiceSelect = user.getUserVoiceSelect();
+        String userVoiceId = user.getUserVoiceId();
+        String userName = user.getUserName(); // userName 가져오기
+
+        // 음성 생성 및 URL 반환
+
+        String s3Url = null;
+        if ("ME".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
+        } else if ("WOMAN".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "uyVNoMrnUku1dZyVEXwD");
+        } else if ("MAN".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
+        }
+
+        // db 값 넣기
         PostEntity postEntity = PostEntity.builder()
-                .userId(postDto.getUserId())
-                .userName(user.getUserName())
-                .postTitle(postDto.getPostTitle())
-                .postCategory(postDto.getPostCategory())
-                .thumbnailUrl(postDto.getThumbnailUrl())
-                .postSummary(postDto.getPostSummary())
-                .postContent(postDto.getPostContent())
-                .audioUrl(postDto.getAudioUrl())
+                .userId(postWriteDto.getUserId())
+                .userName(userName) // userName 등록
+                .postTitle(postWriteDto.getPostTitle())
+                .postCategory(postWriteDto.getPostCategory())
+                .thumbnailUrl(s3ThumbUrl)
+                .postSummary(postWriteDto.getPostSummary())
+                .postContent(postWriteDto.getPostContent())
+                .audioUrl(s3Url)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
-                .isDeleted(false)
                 .build();
 
         PostEntity savedPost = postRepository.save(postEntity);
-        return savedPost.getPostId();
 
+        return savedPost.getPostId();
     }
 
     //게시글 조회
@@ -75,6 +95,7 @@ public class PostService {
                         .audioUrl(post.getAudioUrl())
                         .isDeleted(post.getIsDeleted())
                         .createdAt(post.getCreatedAt())
+                        .userName(post.getUserName())
                         .updatedAt(post.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
@@ -94,6 +115,7 @@ public class PostService {
                 .postSummary(post.getPostSummary())
                 .isDeleted(post.getIsDeleted())
                 .createdAt(post.getCreatedAt())
+                .userName(post.getUserName())
                 .updatedAt(post.getUpdatedAt())
                 .build();
     }
@@ -113,6 +135,7 @@ public class PostService {
                         .audioUrl(post.getAudioUrl())
                         .isDeleted(post.getIsDeleted())
                         .createdAt(post.getCreatedAt())
+                        .userName(post.getUserName())
                         .updatedAt(post.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
@@ -149,6 +172,7 @@ public class PostService {
                 .postContent(post.getPostContent())
                 .audioUrl(post.getAudioUrl())
                 .isDeleted(post.getIsDeleted())
+                .userName(post.getUserName())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
@@ -180,6 +204,7 @@ public class PostService {
                         .postContent(post.getPostContent())
                         .audioUrl(post.getAudioUrl())
                         .isDeleted(post.getIsDeleted())  // 삭제 여부 추가
+                        .userName(post.getUserName())
                         .createdAt(post.getCreatedAt())
                         .updatedAt(post.getUpdatedAt())  // 업데이트 시간 추가
                         .build())
