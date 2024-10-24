@@ -14,13 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*")
 @Data
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*")
 public class PostController {
     private final PostService postService;
 
@@ -50,6 +51,11 @@ public class PostController {
     @GetMapping("/user/{userId}")
     public List<PostDto> getUserPosts(@PathVariable Long userId){
         return postService.getUserPosts(userId);
+    }
+
+    @GetMapping("/user/category/{userId}")
+    public List<PostDto> getUserPostsByCategory(@PathVariable Long userId, @RequestParam String category){
+        return postService.getUserPosts(userId).stream().filter(post -> post.getPostCategory().equals(category)).collect(Collectors.toList());
     }
 
 

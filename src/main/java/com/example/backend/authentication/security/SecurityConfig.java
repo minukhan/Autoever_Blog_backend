@@ -24,7 +24,7 @@ public class SecurityConfig {
             "/", "/api/users/login", "/api/kakao/callback"
     };
 
-    @Bean
+    //@Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -44,7 +44,7 @@ public class SecurityConfig {
     }
 
     // 개발 중 테스트 편의를 위해 임시로 모든 인증과 인가를 비활성화함.
-    //@Bean
+    @Bean
     SecurityFilterChain securityFilterChainTemp(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
