@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin("*")
 @RestController
 @CrossOrigin(origins = "*")
 public class UserController {
@@ -104,7 +103,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/register/{userId}")
+    @CrossOrigin(origins = "*")
+    @PostMapping("/api/users/register/{userId}")
     public ResponseEntity<Object> userInitialSetting(@PathVariable Long userId, @RequestBody UserInitialDto userInitialDto) {
 
         userService.initializeUserInfo(userId, userInitialDto);
