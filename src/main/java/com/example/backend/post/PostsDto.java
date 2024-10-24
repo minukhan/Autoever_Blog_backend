@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class PostDto {
+public class PostsDto {
 
     private Long postId;
-    private String userName;
     private Long userId;
     private String postTitle;
     private String postCategory;
@@ -25,5 +24,7 @@ public class PostDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean isDeleted;
+
+    private String userName;
 
 }
