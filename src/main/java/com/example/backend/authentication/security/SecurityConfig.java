@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Value("${jwt.secret-key}")
     private String secretKey;
     private static final String[] PERMIT_ALL_URLS = {
-            "/", "/api/users/login", "/api/kakao/callback", "/api/posts"
+            "/", "/api/users/login", "/api/kakao/callback", "/api/posts", "/api/posts/category/*", "/narration/register", "/api/users/*", "/api/posts/user/*"
     };
 
     @Bean
