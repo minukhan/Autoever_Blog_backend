@@ -21,6 +21,7 @@ public class UserDetailDto {
     @NoArgsConstructor
     public static class Data{
         private Long userId;
+
         private String name;
         private UserVoice voice;
         private String profileImg;
