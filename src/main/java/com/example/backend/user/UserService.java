@@ -2,6 +2,8 @@ package com.example.backend.user;
 import org.springframework.stereotype.Service;
 import com.example.backend.authentication.AuthUserDto;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserService {
 
@@ -9,7 +11,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    //사용자 상세정보 조회
+    //사용자 상세정보 조회 (프로필 이미지 추가)
     public UserDetailDto getUserinfo(Long userId){
         UserEntity user = userRepository.findById(userId).orElseThrow();
         System.out.println(UserVoice.valueOf(user.getUserVoiceSelect()));
@@ -21,8 +23,10 @@ public class UserService {
                                 .userId(user.getUserId())
                                 .name(user.getUserName())
                                 .voice(UserVoice.valueOf(user.getUserVoiceSelect()))
+                                .profileImg(user.getUserProfileImage())
                                 .social(
                                         UserDetailDto.Social.builder()
+                                                .intro(user.getUserIntro())
                                                 .github(user.getUserGithub())
                                                 .instagram(user.getUserInsta())
                                                 .twitter(user.getUserTwitter())
@@ -39,6 +43,7 @@ public class UserService {
         UserEntity user = userRepository.findById(userRequestDto.getUserId()).orElseThrow();
         user.changeUserName(userRequestDto.getName());
         user.changeUserVoiceSelect(userRequestDto.getVoiceSelect().toString());
+        user.changeUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 
@@ -49,6 +54,15 @@ public class UserService {
         user.changeUserGithub(userRequestDto.getGithub());
         user.changeUserInsta(userRequestDto.getInsta());
         user.changeUserTwitter(userRequestDto.getTwitter());
+        user.changeUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    public void changeToDeletedUser(Long userId){
+        UserEntity user = userRepository.findById(userId).orElseThrow();
+        user.changeDeleted(true);
+        user.changeDeletedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 
@@ -74,5 +88,13 @@ public class UserService {
         user.changeUserProfileImage(authUserDto.getProfileImage());
         user.changeUserRefreshToken(authUserDto.getRefreshToken());
         userRepository.save(user);
+    }
+
+    public void initializeUserInfo(Long userId, UserInitialDto userInitialDto) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow();
+        userEntity.changeUserName(userInitialDto.getUserNickname());
+        userEntity.changeUserIntro(userInitialDto.getUserDesc());
+        userEntity.changeUserVoiceSelect(userInitialDto.getVoiceSelected());
+        userRepository.save(userEntity);
     }
 }
