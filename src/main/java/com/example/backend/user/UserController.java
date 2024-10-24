@@ -20,7 +20,6 @@ public class UserController {
     }
 
 
-
     //사용자 회원탈퇴
     @DeleteMapping("/api/users/{userId}/delete")
     public ResponseEntity<?> deleteUserInfo(
