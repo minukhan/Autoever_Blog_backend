@@ -93,6 +93,7 @@ public class PostService {
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
                 .postContent(post.getPostContent())
+                .audioUrl(post.getAudioUrl())
                 .isDeleted(post.getIsDeleted())
                 .createdAt(post.getCreatedAt())
                 .userName(post.getUserName())
