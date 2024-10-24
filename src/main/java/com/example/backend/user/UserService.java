@@ -2,6 +2,8 @@ package com.example.backend.user;
 import org.springframework.stereotype.Service;
 import com.example.backend.authentication.AuthUserDto;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserService {
 
@@ -41,6 +43,7 @@ public class UserService {
         UserEntity user = userRepository.findById(userRequestDto.getUserId()).orElseThrow();
         user.changeUserName(userRequestDto.getName());
         user.changeUserVoiceSelect(userRequestDto.getVoiceSelect().toString());
+        user.changeUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 
@@ -51,6 +54,15 @@ public class UserService {
         user.changeUserGithub(userRequestDto.getGithub());
         user.changeUserInsta(userRequestDto.getInsta());
         user.changeUserTwitter(userRequestDto.getTwitter());
+        user.changeUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    // 회원 탈퇴
+    public void changeToDeletedUser(Long userId){
+        UserEntity user = userRepository.findById(userId).orElseThrow();
+        user.changeDeleted(true);
+        user.changeDeletedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 
