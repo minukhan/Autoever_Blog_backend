@@ -9,7 +9,7 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    //사용자 상세정보 조회
+    //사용자 상세정보 조회 (프로필 이미지 추가)
     public UserDetailDto getUserinfo(Long userId){
         UserEntity user = userRepository.findById(userId).orElseThrow();
         System.out.println(UserVoice.valueOf(user.getUserVoiceSelect()));
@@ -21,8 +21,10 @@ public class UserService {
                                 .userId(user.getUserId())
                                 .name(user.getUserName())
                                 .voice(UserVoice.valueOf(user.getUserVoiceSelect()))
+                                .profileImg(user.getUserProfileImage())
                                 .social(
                                         UserDetailDto.Social.builder()
+                                                .intro(user.getUserIntro())
                                                 .github(user.getUserGithub())
                                                 .instagram(user.getUserInsta())
                                                 .twitter(user.getUserTwitter())
