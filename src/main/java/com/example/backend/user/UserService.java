@@ -75,4 +75,12 @@ public class UserService {
         user.changeUserRefreshToken(authUserDto.getRefreshToken());
         userRepository.save(user);
     }
+
+    public void initializeUserInfo(Long userId, UserInitialDto userInitialDto) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow();
+        userEntity.changeUserName(userInitialDto.getUserNickname());
+        userEntity.changeUserIntro(userInitialDto.getUserDesc());
+        userEntity.changeUserVoiceSelect(userInitialDto.getVoiceSelected());
+        userRepository.save(userEntity);
+    }
 }

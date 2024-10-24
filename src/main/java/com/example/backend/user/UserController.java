@@ -1,5 +1,6 @@
 package com.example.backend.user;
 
+import com.example.backend.authentication.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,12 +8,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
     UserService userService;
+    private final AuthService authService;
+
+    public UserController(AuthService authService) {
+        this.authService = authService;
+    }
+
 
     //사용자 상세정보 조회
     @GetMapping("/{userId}")
@@ -73,6 +80,13 @@ public class UserController {
                             .build()
             );
         }
+    }
 
+    @PostMapping("/register/{userId}")
+    public ResponseEntity<Object> userInitialSetting(@PathVariable Long userId, @RequestBody UserInitialDto userInitialDto) {
+
+        userService.initializeUserInfo(userId, userInitialDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

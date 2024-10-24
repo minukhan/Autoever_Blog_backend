@@ -1,5 +1,8 @@
 package com.example.backend.authentication;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +17,8 @@ import java.util.Map;
 @Service
 public class AuthService {
 
+    @Value("${jwt.secret-key}")
+    private String secretKey;
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String requestAccessToken(String code) {
@@ -33,5 +38,18 @@ public class AuthService {
         Map<String, Object> kakaoTokenResponse = response.getBody();
 
         return (String) kakaoTokenResponse.get("access_token");
+    }
+
+
+
+    // JWT 토큰에서 userId 추출
+    public Long extractUserId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes())  // 서명 검증을 위한 키
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return Long.valueOf(claims.getSubject());  // `sub` 필드에서 userId 추출
     }
 }
