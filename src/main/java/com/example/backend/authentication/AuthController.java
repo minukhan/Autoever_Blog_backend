@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Map;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
 public class AuthController {
     @Value("${kakao.client.id}")
