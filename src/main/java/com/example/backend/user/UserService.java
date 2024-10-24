@@ -79,6 +79,15 @@ public class UserService {
                 .userName(authUserDto.getNickname())
                 .userProfileImage(authUserDto.getProfileImage())
                 .userRefreshToken(authUserDto.getRefreshToken())
+                .userIntro(authUserDto.getNickname()+"님의 블로그 ^_^")
+                .userVoiceId("ZJCNdZEjYwkOElxugmW2")
+                .userVoiceSelect("MAN")
+                .userGithub("https://github.com/kingnuna")
+                .userInsta("https://www.instagram.com/zuck/")
+                .userTwitter("https://x.com/elonmusk")
+                .createdAt(LocalDateTime.now().withNano(0))
+                .updatedAt(LocalDateTime.now().withNano(0))
+                .isDeleted(Boolean.FALSE)
                 .build();
         userRepository.save(user);
     }
