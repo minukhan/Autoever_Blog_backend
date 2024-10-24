@@ -13,8 +13,9 @@ public class UserService {
     }
     //사용자 상세정보 조회 (프로필 이미지 추가)
     public UserDetailDto getUserinfo(Long userId){
+        System.out.println(userId);
         UserEntity user = userRepository.findById(userId).orElseThrow();
-        System.out.println(UserVoice.valueOf(user.getUserVoiceSelect()));
+
         return UserDetailDto.builder()
                 .isSuccess(true)
                 .message("사용자 상세정보 조회 성공")
@@ -22,7 +23,7 @@ public class UserService {
                         UserDetailDto.Data.builder()
                                 .userId(user.getUserId())
                                 .name(user.getUserName())
-                                .voice(UserVoice.valueOf(user.getUserVoiceSelect()))
+                                .voice(user.getUserVoiceSelect() == null ? UserVoice.MAN : UserVoice.valueOf(user.getUserVoiceSelect()))
                                 .profileImg(user.getUserProfileImage())
                                 .social(
                                         UserDetailDto.Social.builder()
