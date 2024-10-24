@@ -30,8 +30,13 @@ public class PostService {
     // 게시글 작성
     @Transactional
     public Long createPost(PostDto postDto){
+
+        UserEntity user = userRepository.findByUserId(postDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID입니다."));
+
         PostEntity postEntity = PostEntity.builder()
                 .userId(postDto.getUserId())
+                .userName(user.getUserName())
                 .postTitle(postDto.getPostTitle())
                 .postCategory(postDto.getPostCategory())
                 .thumbnailUrl(postDto.getThumbnailUrl())
@@ -51,8 +56,10 @@ public class PostService {
     //게시글 조회
     @Transactional
     public List<PostDto> getAllPosts(){
+
         List<PostEntity> posts = postRepository.findAll();
         return posts.stream().map(post -> PostDto.builder()
+                        .userName(post.getUserName())
                         .postId(post.getPostId())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
@@ -75,6 +82,7 @@ public class PostService {
 
         return PostDto.builder()
                 .postId(post.getPostId())
+                .userName(post.getUserName())
                 .userId(post.getUserId())
                 .postTitle(post.getPostTitle())
                 .postCategory(post.getPostCategory())
@@ -94,6 +102,7 @@ public class PostService {
         List<PostEntity> posts = postRepository.findByUserId(userId);
         return posts.stream().map(post -> PostDto.builder()
                         .postId(post.getPostId())
+                        .userName(post.getUserName())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
                         .postCategory(post.getPostCategory())
@@ -162,6 +171,7 @@ public class PostService {
         return posts.stream()
                 .map(post -> PostDto.builder()
                         .postId(post.getPostId())
+                        .userName(post.getUserName())
                         .userId(post.getUserId())
                         .postTitle(post.getPostTitle())
                         .postCategory(post.getPostCategory())
