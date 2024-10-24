@@ -16,12 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*")
 @Data
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class PostController {
     private final PostService postService;
 

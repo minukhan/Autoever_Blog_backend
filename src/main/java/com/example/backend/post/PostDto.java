@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class PostDto {
 
     private Long postId;
+    private String userName;
     private Long userId;
     private String postTitle;
     private String postCategory;
