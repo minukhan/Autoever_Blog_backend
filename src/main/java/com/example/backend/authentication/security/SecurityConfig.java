@@ -20,16 +20,11 @@ public class SecurityConfig {
 
     @Value("${jwt.secret-key}")
     private String secretKey;
-    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private static final String[] PERMIT_ALL_URLS = {
-            "/", "/api/users/login"
+            "/", "/api/users/login", "/api/kakao/callback"
     };
 
-    public SecurityConfig(CustomOAuth2SuccessHandler customOAuth2SuccessHandler) {
-        this.customOAuth2SuccessHandler = customOAuth2SuccessHandler;
-    }
-
-    //@Bean
+    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -38,10 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_ALL_URLS).permitAll() // 인증 없이 접근 가능
                         .anyRequest().authenticated() // 나머지 모든 경로는 인증 필요
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login/kakao") // 로그인 버튼을 눌렀을 때만 OAuth2 로그인 트리거
-                        .successHandler(customOAuth2SuccessHandler) // 로그인 성공 시 JWT 발급 등 추가 처리
-                )
+                .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))// JWT 인증 설정
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -52,7 +44,7 @@ public class SecurityConfig {
     }
 
     // 개발 중 테스트 편의를 위해 임시로 모든 인증과 인가를 비활성화함.
-    @Bean
+    //@Bean
     SecurityFilterChain securityFilterChainTemp(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
