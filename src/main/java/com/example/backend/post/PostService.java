@@ -92,6 +92,7 @@ public class PostService {
                 .postCategory(post.getPostCategory())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .postSummary(post.getPostSummary())
+                .postContent(post.getPostContent())
                 .isDeleted(post.getIsDeleted())
                 .createdAt(post.getCreatedAt())
                 .userName(post.getUserName())
