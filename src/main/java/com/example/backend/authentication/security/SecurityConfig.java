@@ -41,12 +41,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 나머지 모든 경로는 인증 필요
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))// JWT 인증 설정 // JWT 인증 설정
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            // JWT가 없을 경우 401 Unauthorized 반환
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        }))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))// JWT 인증 설정
                 .build();
     }
 
