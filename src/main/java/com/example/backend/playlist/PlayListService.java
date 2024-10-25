@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -62,25 +64,26 @@ public class PlayListService {
                 .build();
     }
 
-    // 유저별 플레이 리스트 조회
+    // 유저별 플레이리스트 조회
     @Transactional
     public List<PlayListDto> getPlayListByUser(Long userId) {
         // 플레이리스트를 userId로 조회
         List<PlaylistEntity> playlists = playlistRepository.findByUserId(userId);
+
+        // 플레이리스트가 없을 경우 빈 리스트 반환
         if (playlists.isEmpty()) {
-            throw new IllegalArgumentException("해당 ID의 사용자는 플레이리스트가 없습니다.");
+            return Collections.emptyList();
         }
 
         // userId로 유저 조회
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
-
+                .orElseThrow(() -> new NoSuchElementException("해당 ID의 사용자를 찾을 수 없습니다."));
 
         // 플레이리스트 엔티티를 PlayListDto로 변환하여 반환
         return playlists.stream()
                 .map(playlist -> {
                     PostEntity post = postRepository.findById(playlist.getPostId())
-                            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글을 찾을 수 없습니다."));
+                            .orElseThrow(() -> new NoSuchElementException("해당 ID의 게시글을 찾을 수 없습니다."));
 
                     // PlayListDto 생성
                     return PlayListDto.builder()
