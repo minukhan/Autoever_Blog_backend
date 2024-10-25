@@ -25,19 +25,21 @@ public class UserController {
     public ResponseEntity<?> deleteUserInfo(
             @PathVariable(name = "userId") Long userId
     ){
-        try{
-            userService.changeToDeletedUser(userId);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(Map.of("isSuccess", true, "message", "사용자 탈퇴 성공"));
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    UserRequestFailDto.withAll()
-                            .error(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .message(e.getMessage())
-                            .path("/api/users/"+userId+"/delete")
-                            .build()
-            );
-        }
+//        try{
+//            userService.changeToDeletedUser(userId);
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(Map.of("isSuccess", true, "message", "사용자 탈퇴 성공"));
+//        }catch(Exception e){
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+//                    UserRequestFailDto.withAll()
+//                            .error(HttpStatus.INTERNAL_SERVER_ERROR)
+//                            .message(e.getMessage())
+//                            .path("/api/users/"+userId+"/delete")
+//                            .build()
+//            );
+//        }
+        userService.deleteUserAndPosts(userId);
+        return ResponseEntity.ok("User and posts deleted successfully.");
     }
 
     //사용자 상세정보 조회
