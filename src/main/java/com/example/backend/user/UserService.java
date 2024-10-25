@@ -1,4 +1,6 @@
 package com.example.backend.user;
+import com.example.backend.post.PostRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.example.backend.authentication.AuthUserDto;
 
@@ -8,8 +10,11 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final PostRepository postRepository;
+
+    public UserService(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
     //사용자 상세정보 조회 (프로필 이미지 추가)
     public UserDetailDto getUserinfo(Long userId){
@@ -106,5 +111,14 @@ public class UserService {
         userEntity.changeUserIntro(userInitialDto.getUserDesc());
         userEntity.changeUserVoiceSelect(userInitialDto.getVoiceSelected());
         userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public void deleteUserAndPosts(Long userId) {
+        // 유저의 게시글 삭제
+        postRepository.deleteByUserId(userId);
+
+        // 유저 삭제
+        userRepository.deleteById(userId);
     }
 }
