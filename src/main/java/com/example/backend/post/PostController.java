@@ -71,8 +71,11 @@ public class PostController {
 
 
     @PutMapping("/{postId}")
-    public PostDto updatePost(@PathVariable Long postId, @RequestBody PostDto postDto) {
-        return postService.updatePost(postId, postDto);
+    public PostDto updatePost(
+            @PathVariable Long postId,
+            @ModelAttribute PostWriteDto postWriteDto,
+            @RequestParam("thumbnailUrl") MultipartFile thumbnailUrl) {
+        return postService.updatePost(postId, postWriteDto, thumbnailUrl);
     }
 
     @DeleteMapping("/{postId}")
