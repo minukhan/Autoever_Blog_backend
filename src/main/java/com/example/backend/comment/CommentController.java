@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @Data
 @RestController
 @RequestMapping("/api/comment")
@@ -30,7 +30,7 @@ public class CommentController {
     }
 
     //댓글 게시글 별 조회
-    @GetMapping("{postId}")
+    @GetMapping("/{postId}")
     public List<CommentResponseDto> getPostById(@PathVariable Long postId){
         return commentService.getPostById(postId);
     }

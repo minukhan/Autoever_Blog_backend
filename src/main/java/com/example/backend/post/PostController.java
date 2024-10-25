@@ -36,10 +36,21 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postId);
     }
 
+
     @GetMapping
-    public List<PostDto> getAllPosts(){
+    public List<PostsDto> getAllPosts(){
         return postService.getAllPosts();
     }
+
+    //카테고리별 조회
+    @GetMapping("/category/{category}")
+    public List<PostsDto> getPostsByCategory(@PathVariable String category){
+        List<PostsDto> posts = postService.getPostsByCategory(category);
+        log.info("######################" + posts.toString());
+        return postService.getPostsByCategory(category);
+    }
+
+
 
     // 특정 게시글 조회
     @GetMapping("/{postId}")
@@ -68,11 +79,6 @@ public class PostController {
     public String deletePost(@PathVariable Long postId){
         postService.deletePost(postId);
         return postId + " 삭제 완료 " ;
-    }
-    //카테고리별 조회
-    @GetMapping("/category/{category}")
-    public List<PostDto> getPostsByCategory(@PathVariable String category){
-        return postService.getPostsByCategory(category);
     }
 
     //댓글 등록

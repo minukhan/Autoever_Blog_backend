@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
 public class AuthController {
     @Value("${kakao.client.id}")
