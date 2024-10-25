@@ -2,6 +2,7 @@ package com.example.backend.user;
 import com.example.backend.post.PostEntity;
 import com.example.backend.post.PostRepository;
 import com.example.backend.utils.VoiceUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.example.backend.authentication.AuthUserDto;
 
@@ -54,7 +55,6 @@ public class UserService {
         user.changeUserName(userRequestDto.getName());
         user.changeUserVoiceSelect(userRequestDto.getVoiceSelect().toString());
         user.changeUpdatedAt(LocalDateTime.now());
-        System.out.println("!!!!!!!! 수정됨 !!!!!!!!");
         userRepository.save(user);
 
         List<PostEntity> posts = postRepository.findByUserId(userRequestDto.getUserId());
@@ -147,5 +147,14 @@ public class UserService {
         userEntity.changeUserIntro(userInitialDto.getUserDesc());
         userEntity.changeUserVoiceSelect(userInitialDto.getVoiceSelected());
         userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public void deleteUserAndPosts(Long userId) {
+        // 유저의 게시글 삭제
+        postRepository.deleteByUserId(userId);
+
+        // 유저 삭제
+        userRepository.deleteById(userId);
     }
 }
