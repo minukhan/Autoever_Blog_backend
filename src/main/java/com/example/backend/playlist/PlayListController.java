@@ -29,6 +29,12 @@ public class PlayListController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<PlayListDto>> getAllPlaylist(@PathVariable Long userId){
         List<PlayListDto> playList = playListService.getPlayListByUser(userId);
+
+        // 플레이리스트가 없을 경우 204 No Content 반환
+        if (playList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
         return ResponseEntity.ok(playList);
     }
 
