@@ -265,4 +265,25 @@ public class PostService {
                 .build();
     }
 
+    public String mapToKorean(String englishCategory) {
+        switch (englishCategory.toUpperCase()) {  // 대소문자 구분 없이 처리
+            case "TECH":
+                return "기술";
+            case "COOK":
+                return "음식";
+            case "TRAVEL":
+                return "여행";
+            case "ANIMAL":
+                return "반려동물";
+            case "NEWS":
+                return "뉴스";
+            case "MOVIE":
+                return "영화";
+            case "ENTERTAIN":
+                return "연예";
+            default:
+                throw new IllegalArgumentException("Invalid category: " + englishCategory);
+        }
+    }
+
 }

@@ -66,7 +66,7 @@ public class PostController {
 
     @GetMapping("/user/category/{userId}")
     public List<PostDto> getUserPostsByCategory(@PathVariable Long userId, @RequestParam String category){
-        return postService.getUserPosts(userId).stream().filter(post -> post.getPostCategory().equals(category)).collect(Collectors.toList());
+        return postService.getUserPosts(userId).stream().filter(post -> post.getPostCategory().equals(postService.mapToKorean(category))).collect(Collectors.toList());
     }
 
 
