@@ -124,7 +124,7 @@ public class PostService {
 
     //게시글 수정
     @Transactional
-    public PostDto updatePost(Long postId, PostDto postDto){
+    public PostDto updatePost(Long postId, PostWriteDto postWriteDto, MultipartFile thumbnailUrl){
 
         Optional<PostEntity> optionalPost = postRepository.findById(postId);
 
@@ -133,12 +133,37 @@ public class PostService {
             throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
         }
 
+        // s3
+        String directory = "images";
+        String s3ThumbUrl = s3Util.upload(directory, thumbnailUrl);
+
+        // user 테이블에서 user_voice_select, user_voice_id, user_name 값 가져오기
+        UserEntity user = userRepository.findById(postWriteDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        String userVoiceSelect = user.getUserVoiceSelect();
+        String userVoiceId = user.getUserVoiceId();
+        String userName = user.getUserName(); // userName 가져오기
+
+        // 음성 생성 및 URL 반환
+
+        String s3Url = null;
+        if ("ME".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), userVoiceId);
+        } else if ("WOMAN".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "uyVNoMrnUku1dZyVEXwD");
+        } else if ("MAN".equals(userVoiceSelect)) {
+            s3Url = voiceUtil.generateVoice(postWriteDto.getPlainText(), "ZJCNdZEjYwkOElxugmW2");
+        }
+
+
         PostEntity post = optionalPost.get();
-        post.setPostTitle(postDto.getPostTitle());
-        post.setPostCategory(postDto.getPostCategory());
-        post.setThumbnailUrl(postDto.getThumbnailUrl());
-        post.setPostContent(postDto.getPostContent());
-        post.setAudioUrl(postDto.getAudioUrl());
+        post.setPostTitle(postWriteDto.getPostTitle());
+        post.setPostCategory(postWriteDto.getPostCategory());
+        post.setPostSummary(postWriteDto.getPostSummary());
+        post.setPostContent(postWriteDto.getPostContent());
+        post.setThumbnailUrl(s3ThumbUrl);
+        post.setAudioUrl(s3Url);
         post.setUpdatedAt(LocalDateTime.now()); //수정된 시간 업데이트
 
         postRepository.save(post);
