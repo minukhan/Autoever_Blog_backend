@@ -1,20 +1,25 @@
 package com.example.backend.user;
+import com.example.backend.post.PostEntity;
 import com.example.backend.post.PostRepository;
+import com.example.backend.utils.VoiceUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.example.backend.authentication.AuthUserDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final VoiceUtil voiceUtil;
 
-    public UserService(UserRepository userRepository, PostRepository postRepository) {
+    public UserService(UserRepository userRepository, PostRepository postRepository, VoiceUtil voiceUtil) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.voiceUtil = voiceUtil;
     }
     //사용자 상세정보 조회 (프로필 이미지 추가)
     public UserDetailDto getUserinfo(Long userId){
@@ -51,6 +56,37 @@ public class UserService {
         user.changeUserVoiceSelect(userRequestDto.getVoiceSelect().toString());
         user.changeUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
+
+        List<PostEntity> posts = postRepository.findByUserId(userRequestDto.getUserId());
+        if(posts.isEmpty()) {
+            return;
+        }
+        else{
+            String plainText;
+            String userVoiceSelect = user.getUserVoiceSelect();
+            String userVoiceId = user.getUserVoiceId();
+            String userName = user.getUserName();
+
+            String s3Url = null;
+            for(PostEntity p : posts){
+                plainText = p.getPostContent().replaceAll("<[^>]*>", "");
+                s3Url = null;
+
+                if ("ME".equals(userVoiceSelect)) {
+                    s3Url = voiceUtil.generateVoice(plainText, userVoiceId);
+                } else if ("WOMAN".equals(userVoiceSelect)) {
+                    s3Url = voiceUtil.generateVoice(plainText, "uyVNoMrnUku1dZyVEXwD");
+                } else if ("MAN".equals(userVoiceSelect)) {
+                    s3Url = voiceUtil.generateVoice(plainText, "ZJCNdZEjYwkOElxugmW2");
+                }
+
+                p.setAudioUrl(s3Url);
+                postRepository.save(p);
+            }
+
+            return;
+        }
+
     }
 
     //사용자 blog 소개 + social link 수정
