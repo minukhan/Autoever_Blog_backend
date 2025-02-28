@@ -13,5 +13,5 @@ public class UserInitialDto {
 
     private String userNickname;
     private String userDesc;
-    private String voice;
+    private String voiceSelected;
 }
