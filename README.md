@@ -7,3 +7,9 @@ TTS 기술을 통해 바쁜 일상 속에도 손쉽게 정보를 전달하고, �
 
 ![블로그](https://github.com/user-attachments/assets/f190b26d-4078-45f6-8f2a-f26380a68ace)
 ![아키텍처](https://github.com/user-attachments/assets/e93059f7-a5bc-49ec-8011-caf82d899782)
+
+| 현대오토에버 모빌리티 SW스쿨 웹/앱 과정 웹 프로젝트
+
+<br/>
+
+[![YouTube 영상 보기][(https://img.youtube.com/vi/2wfLe34CqaA/0.jpg)](https://www.youtube.com/watch?v=2wfLe34CqaA)](https://youtu.be/lTnqBDWPV_g)
