@@ -12,4 +12,4 @@ TTS 기술을 통해 바쁜 일상 속에도 손쉽게 정보를 전달하고, �
 
 <br/>
 
-[![YouTube 영상 보기][(https://img.youtube.com/vi/2wfLe34CqaA/0.jpg)](https://www.youtube.com/watch?v=2wfLe34CqaA)](https://youtu.be/lTnqBDWPV_g)
+[![YouTube Video](https://img.youtube.com/vi/lTnqBDWPV_g/0.jpg)](https://youtu.be/lTnqBDWPV_g)
