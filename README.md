@@ -11,7 +11,6 @@ TTS 기술을 통해 바쁜 일상 속에도 손쉽게 정보를 전달하고, �
 | 현대오토에버 모빌리티 SW스쿨 웹/앱 과정 웹 프로젝트
 
 <br/>
-## 🎥 프로젝트 시연 영상
 
 [![CineWall 시연 영상](https://img.youtube.com/vi/lTnqBDWPV_g/0.jpg)](https://youtu.be/lTnqBDWPV_g)
 
